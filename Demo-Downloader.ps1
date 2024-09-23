@@ -1,23 +1,51 @@
-param(
-    [String]$SteamID,
-    [String]$DownloadFolder,
-    [String]$DateFilter,
-    [bool]$Extract = $true,
-    [bool]$DeleteAfterExtract = $true
-)
+<#
+    .SYNOPSIS
+        This script will download played matches that match a given SteamID and extract them to .dem automatically. This script requires 7-Zip be installed to extract.
+    .DESCRIPTION
+        Script attempts to download matches played by a specific SteamID that were recorded to the eFPS website. It can also be configured to automatically extract the downloaded .bz2 files if you already have 7-Zip installed.
+    .PARAMETER SteamID
+        String Value: Steam ID provided in the following format indicates which player to download for.
+        Example: STEAM_0:1:8634346
+    .PARAMETER DownloadFolder
+        String Value: Specifies the path to download and extract demos into.
+    .PARAMETER DateFilter
+        Boolean Value: Set to $True if you want to only download demos after the date specified in the $DownloadDate Parameter.
+    .PARAMETER DownloadDate
+        DateTime Value: Set to the date you wish to use as a download after filter. Must be in yyyy-MM-dd format.
+        Example: 2024-09-21
+    .PARAMETER Extract
+        Boolean Value: Set to $True if you want to extract the .bz2 files once downloaded automatically. 
+    .PARAMETER DeleteAfterExtract
+        Boolean Value: Set to true if you wish to delete the .bz2 files after the .dem has been extracted.
+    .PARAMETER 7ZipPath
+        String Value: Optional Parameter used to set the location for 7z.exe. By default this is set to Program Files\7-Zip\7z.exe
+#>
 
-#Enter your Steam ID
-$SteamID = "STEAM_0:1:8634346"
-$DownloadFolder = "C:\temp\demos"
-#Set DateFilter to $True to only download demos after $DownloadDate
-$DateFilter = $True
-$DownloadDate = "2024-09-21"
-#If you wish to extract your files to the download file set this to $True, otherwise, false.
-$Extract = $true
-#If you wish to delete the .bz2 files after extraction, set $DeleteAfterExtract to $true
-$DeleteAfterExtract = $True
-#7-Zip Settings
-$7zipPath = "$env:ProgramFiles\7-Zip\7z.exe"
+param (
+    [Parameter(Mandatory=$True,
+        HelpMessage='Please provide your steamid here. Example: STEAM_0:1:8634346')]
+    [String]$SteamID,
+    [Parameter(Mandatory=$True,
+        HelpMessage='Please enter the path you wish to download your demos to.')]
+    [String]$DownloadFolder,
+    [Parameter(Mandatory=$True,
+        HelpMessage='If you would like to only download demos after a specific date, set this to $True')]
+    [Bool]$DateFilter = $false,
+    [Parameter(Mandatory=$True,
+        HelpMessage='If you are specifying a date enter your datetime stamp in yyyy-MM-dd format. Else leave blank')]
+    [DateTime]$DownloadDate,
+    [Parameter(Mandatory=$True,
+        HelpMessage='If you would like to automatically extract your downloads to .dem, please set this to $True')]
+    [ValidateSet($True, $False)]
+    [bool]$Extract = $true,
+    [Parameter(Mandatory=$True,
+        HelpMessage='If you would like to delete the .bz2 files after extraction, set this to $True')]
+    [ValidateSet($True, $False)]
+    [bool]$DeleteAfterExtract = $False,
+    [Parameter(Mandatory=$False,
+        HelpMessage='Please provide the path to 7z.exe')]
+    [string]$7ZipPath = "$env:programFiles\7-Zip\7z.exe"
+)
 
 ### Don't Edit ###
 if($DateFilter -eq $True)
@@ -37,7 +65,8 @@ if(!(Test-Path $DownloadFolder))
     New-Item -Path $FolderPath -Name $FolderName -ItemType Directory
 }
 
-if (-not (Test-Path -Path $7zipPath -PathType Leaf)) {
+
+if ($Extract -eq $true -and -not (Test-Path -Path $7zipPath -PathType Leaf)) {
     throw "7 zip executable '$7zipPath' not found"
 }
 
@@ -64,7 +93,6 @@ if($demos.Status -eq "Success")
         Write-Progress -Activity "Downloading Demos" -Completed $True
     }
     catch {
-        <#Do this if a terminating exception happens#>
         Write-Error -Message $_
     }
 }
@@ -80,7 +108,6 @@ if($extract -eq $true)
         Write-Progress -Activity "Extracting Demos" -Completed $True
     }
     catch {
-        <#Do this if a terminating exception happens#>
         Write-Error -Message $_
     }
 }
