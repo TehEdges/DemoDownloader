@@ -14,6 +14,31 @@ This PowerShell script automates the process of downloading played match demos b
 - Supports filtering downloads by date.
 - Option to automatically delete `.bz2` files after extraction.
 
+## Instructions
+
+### Step 1: Open PowerShell
+#### On Windows 10/11:
+1. Press `Win + X` and select **Windows PowerShell** from the menu, or
+2. Type "PowerShell" in the Windows search bar and press `Enter`.
+
+#### On older versions of Windows:
+1. Press `Win + R`, type `powershell`, and press `Enter`.
+
+### Step 2: Prepare the Script
+1. Download the script file (e.g., `Demo-Downloader.ps1`) and save it in a folder of your choice.
+
+2. Navigate to the folder where the script is saved using the `cd` command in PowerShell. For example, if the script is in `C:\Scripts`, type the following:
+   ```powershell
+   cd C:\Scripts
+   ```
+3. You may need to temporarily allow PowerShell to execute scripts by running:
+   ```powershell
+   Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+   ```
+4. Call .\Demo-Downloader.ps1 with the appropriate parameters. 
+    ```powershell
+    .\DownloadMatches.ps1 -SteamID "STEAM_0:1:8634346" -DownloadFolder "C:\Demos" -DateFilter $True -DownloadDate "2024-09-21" -Extract $True -DeleteAfterExtract $True
+    ```
 ## Parameters
 
 ### `SteamID`
@@ -45,8 +70,3 @@ This PowerShell script automates the process of downloading played match demos b
 ### `7ZipPath`
 - **Type**: `String`
 - **Description**: Specifies the path to `7z.exe`. If not provided, defaults to `Program Files\7-Zip\7z.exe`.
-
-## Usage Example
-
-```powershell
-.\DownloadMatches.ps1 -SteamID "STEAM_0:1:8634346" -DownloadFolder "C:\Demos" -DateFilter $True -DownloadDate "2024-09-21" -Extract $True -DeleteAfterExtract $True
