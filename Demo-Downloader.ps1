@@ -8,10 +8,8 @@
         Example: STEAM_0:1:8634346
     .PARAMETER DownloadFolder
         String Value: Specifies the path to download and extract demos into.
-    .PARAMETER DateFilter
-        Boolean Value: Set to $True if you want to only download demos after the date specified in the $DownloadDate Parameter.
     .PARAMETER DownloadDate
-        DateTime Value: Set to the date you wish to use as a download after filter. Must be in yyyy-MM-dd format.
+        DateTime Value: Set to the date you wish to use as a download after filter. Must be in yyyy-MM-dd format. Leave blank to download all demos matching the steamid.
         Example: 2024-09-21
     .PARAMETER Extract
         Boolean Value: Set to $True if you want to extract the .bz2 files once downloaded automatically. 
@@ -28,27 +26,24 @@ param (
     [Parameter(Mandatory=$True,
         HelpMessage='Please enter the path you wish to download your demos to.')]
     [String]$DownloadFolder,
-    [Parameter(Mandatory=$True,
-        HelpMessage='If you would like to only download demos after a specific date, set this to $True')]
-    [Bool]$DateFilter = $false,
-    [Parameter(Mandatory=$True,
-        HelpMessage='If you are specifying a date enter your datetime stamp in yyyy-MM-dd format. Else leave blank')]
+    [Parameter(Mandatory=$False,
+        HelpMessage='If you are specifying a date enter your datetime stamp in yyyy-MM-dd format. Else leave blank',ParameterSetName='DateFilter')]
     [DateTime]$DownloadDate,
-    [Parameter(Mandatory=$True,
+    [Parameter(Mandatory=$False,
         HelpMessage='If you would like to automatically extract your downloads to .dem, please set this to $True')]
     [ValidateSet($True, $False)]
     [bool]$Extract = $true,
-    [Parameter(Mandatory=$True,
+    [Parameter(Mandatory=$False,
         HelpMessage='If you would like to delete the .bz2 files after extraction, set this to $True')]
     [ValidateSet($True, $False)]
-    [bool]$DeleteAfterExtract = $False,
+    [bool]$DeleteAfterExtract = $True,
     [Parameter(Mandatory=$False,
         HelpMessage='Please provide the path to 7z.exe')]
     [string]$7ZipPath = "$env:programFiles\7-Zip\7z.exe"
 )
 
 ### Don't Edit ###
-if($DateFilter -eq $True)
+if($DownloadDate)
 {
     $URL = "https://hl2dm.everythingfps.com/crons/player_demos.php?steamid=$SteamID&key=038fcc47c86f493b5548a36f679d67fe&date=$DownloadDate"
 }

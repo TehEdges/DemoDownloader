@@ -25,13 +25,9 @@ This PowerShell script automates the process of downloading played match demos b
 - **Type**: `String`
 - **Description**: Specifies the folder path where demos will be downloaded and extracted.
   
-### `DateFilter`
-- **Type**: `Boolean`
-- **Description**: Set to `$True` to only download demos after the specified date in the `DownloadDate` parameter.
-
 ### `DownloadDate`
 - **Type**: `DateTime`
-- **Description**: The date to filter downloads after. Must be in `yyyy-MM-dd` format.
+- **Description**: The date to filter downloads after. Must be in `yyyy-MM-dd` format. If specified, this will limit the demos returned to only on or after the date specified.
 - **Example**: `2024-09-21`
 
 ### `Extract`
