@@ -1,77 +1,52 @@
-SYNOPSIS
-    This script will download played matches that match a given SteamID and extract them to .dem automatically. This script requires 7-Zip be installed to extract.
+# eFPS Match Demo Downloader & Extractor Script
 
+This PowerShell script automates the process of downloading played match demos based on a specific SteamID from the eFPS website and optionally extracts them using 7-Zip. 
 
-SYNTAX
-    .\Demo-Downloader.ps1 [-SteamID] <String> [-DownloadFolder] <String> [-DateFilter] <Boolean> [-DownloadDate] <DateTime> [-Extract] <Boolean> [-DeleteAfterExtract] <Boolean> [[-7ZipPath] <String>] [<CommonParameters>]
+## Requirements
 
+- **PowerShell**
+- **7-Zip** installed (if you wish to automatically extract the downloaded files)
 
-DESCRIPTION
-    Script attempts to download matches played by a specific SteamID that were recorded to the eFPS website. It can also be configured to automatically extract the downloaded .bz2 files if you already have 7-Zip installed.
+## Features
 
+- Downloads played match demos based on a provided SteamID.
+- Optionally extracts `.bz2` files into `.dem` files using 7-Zip.
+- Supports filtering downloads by date.
+- Option to automatically delete `.bz2` files after extraction.
 
-PARAMETERS
-    -SteamID <String>
-        String Value: Steam ID provided in the following format indicates which player to download for.
-        Example: STEAM_0:1:8634346
+## Parameters
 
-        Required?                    true
-        Position?                    1
-        Default value
-        Accept pipeline input?       false
-        Accept wildcard characters?  false
+### `SteamID`
+- **Type**: `String`
+- **Description**: Specifies the SteamID to download matches for.
+- **Format Example**: `STEAM_0:1:8634346`
+  
+### `DownloadFolder`
+- **Type**: `String`
+- **Description**: Specifies the folder path where demos will be downloaded and extracted.
+  
+### `DateFilter`
+- **Type**: `Boolean`
+- **Description**: Set to `$True` to only download demos after the specified date in the `DownloadDate` parameter.
 
-    -DownloadFolder <String>
-        String Value: Specifies the path to download and extract demos into.
+### `DownloadDate`
+- **Type**: `DateTime`
+- **Description**: The date to filter downloads after. Must be in `yyyy-MM-dd` format.
+- **Example**: `2024-09-21`
 
-        Required?                    true
-        Position?                    2
-        Default value
-        Accept pipeline input?       false
-        Accept wildcard characters?  false
+### `Extract`
+- **Type**: `Boolean`
+- **Description**: Set to `$True` if you want to automatically extract the `.bz2` files after download.
 
-    -DateFilter <Boolean>
-        Boolean Value: Set to $True if you want to only download demos after the date specified in the $DownloadDate Parameter.
+### `DeleteAfterExtract`
+- **Type**: `Boolean`
+- **Description**: Set to `$True` if you want to automatically delete the `.bz2` files after they are extracted to `.dem` format.
 
-        Required?                    true
-        Position?                    3
-        Default value                False
-        Accept pipeline input?       false
-        Accept wildcard characters?  false
+### `7ZipPath`
+- **Type**: `String`
+- **Description**: Specifies the path to `7z.exe`. If not provided, defaults to `Program Files\7-Zip\7z.exe`.
 
-    -DownloadDate <DateTime>
-        DateTime Value: Set to the date you wish to use as a download after filter. Must be in yyyy-MM-dd format.
-        Example: 2024-09-21
+## Usage Example
 
-        Required?                    true
-        Position?                    4
-        Default value
-        Accept pipeline input?       false
-        Accept wildcard characters?  false
-
-    -Extract <Boolean>
-        Boolean Value: Set to $True if you want to extract the .bz2 files once downloaded automatically.
-
-        Required?                    true
-        Position?                    5
-        Default value                True
-        Accept pipeline input?       false
-        Accept wildcard characters?  false
-
-    -DeleteAfterExtract <Boolean>
-        Boolean Value: Set to true if you wish to delete the .bz2 files after the .dem has been extracted.
-
-        Required?                    true
-        Position?                    6
-        Default value                False
-        Accept pipeline input?       false
-        Accept wildcard characters?  false
-
-    -7ZipPath <String>
-        String Value: Optional Parameter used to set the location for 7z.exe. By default this is set to Program Files\7-Zip\7z.exe
-
-        Required?                    false
-        Position?                    7
-        Default value                "$env:programFiles\7-Zip\7z.exe"
-        Accept pipeline input?       false
-        Accept wildcard characters?  false
+```powershell
+.\DownloadMatches.ps1 -SteamID "STEAM_0:1:8634346" -DownloadFolder "C:\Demos" -DateFilter $True -DownloadDate "2024-09-21" -Extract $True -DeleteAfterExtract $True
