@@ -81,7 +81,13 @@ if($demos.Status -eq "Success")
             Write-Progress -Activity "Downloading Demos" -Status "Downloading: $i of $total" -PercentComplete (($i / $total) * 100)
             $BZ2Name = $Demo.Split("/") | Select-Object -Last 1
             $FullName = $DownloadFolder + "\" + $BZ2Name
-            $wc.DownloadFile($demo, $FullName)
+            try{
+                $wc.DownloadFile($demo, $FullName)
+            }
+            catch
+            {
+                Write-Error "Unable to download $Demo; Check to see if it exists."
+            }
             $i++
         }
         $wc.Dispose()
